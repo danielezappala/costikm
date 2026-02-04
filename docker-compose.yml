@@ -1,0 +1,25 @@
+version: "3.9"
+
+networks:
+  traefik-net:
+    external: true
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.costikm.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.costikm.entrypoints=websecure"
+      - "traefik.http.routers.costikm.tls.certresolver=letsencrypt"
+      - "traefik.http.services.costikm.loadbalancer.server.port=4000"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

@@ -1,0 +1,9 @@
+node_modules
+client/node_modules
+.git
+.DS_Store
+.env
+npm-debug.log
+client/dist
+client/.vite
+data/aci-xlsx

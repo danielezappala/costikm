@@ -1,0 +1,19 @@
+<svg width="560" height="560" viewBox="0 0 560 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="560" height="560" fill="none"/>
+  <g stroke="rgba(15, 23, 42, 0.08)" stroke-width="1">
+    <path d="M0 40H560"/>
+    <path d="M0 120H560"/>
+    <path d="M0 200H560"/>
+    <path d="M0 280H560"/>
+    <path d="M0 360H560"/>
+    <path d="M0 440H560"/>
+    <path d="M0 520H560"/>
+    <path d="M40 0V560"/>
+    <path d="M120 0V560"/>
+    <path d="M200 0V560"/>
+    <path d="M280 0V560"/>
+    <path d="M360 0V560"/>
+    <path d="M440 0V560"/>
+    <path d="M520 0V560"/>
+  </g>
+</svg>
