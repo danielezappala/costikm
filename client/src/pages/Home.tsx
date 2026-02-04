@@ -17,7 +17,7 @@ import { formatEuro, formatEuroKm } from '@/utils/formatCurrency';
 import { formatNumber } from '@/utils/formatNumber';
 import { jsPDF } from 'jspdf';
 
-const API_BASE = 'http://localhost:4000';
+const API_BASE = import.meta.env.DEV ? 'http://localhost:4000' : '';
 
 type CalcResult = {
   cost_per_km_eur: number;
