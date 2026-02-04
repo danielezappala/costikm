@@ -156,31 +156,31 @@ export function Home() {
 
     const pageRight = 190;
     const contentW = pageRight - marginX;
-    const labelW = 30;
+    const labelW = 34;
     const valueX = marginX + labelW;
     const valueW = contentW - labelW;
 
     const fieldRow = (yPos: number, label: string, value: string, boldValue = false) => {
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
       doc.setTextColor(110);
       doc.text(`${label}:`, marginX, yPos);
       doc.setTextColor(20);
-      if (boldValue) doc.setFont('helvetica', 'bold');
+      doc.setFont('helvetica', boldValue ? 'bold' : 'normal');
       const lines = doc.splitTextToSize(value, valueW);
       doc.text(lines, valueX, yPos);
-      if (boldValue) doc.setFont('helvetica', 'normal');
+      doc.setFont('helvetica', 'normal');
       return yPos + lines.length * 5 + 3;
     };
 
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(16);
+    doc.setFontSize(17);
     doc.setTextColor(20);
     doc.text('Calcolo costi chilometrici', marginX, y);
     y += 12;
 
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.setTextColor(20);
     doc.text('Dati veicolo', marginX, y);
     y += 6;
@@ -191,7 +191,7 @@ export function Home() {
 
     y += 6;
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.setTextColor(20);
     doc.text('Dati itinerario', marginX, y);
     y += 6;
@@ -205,17 +205,27 @@ export function Home() {
     y += 6;
 
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.setTextColor(20);
     doc.text('Dettaglio costi', marginX, y);
     y += 6;
 
     y = fieldRow(y, 'Distanza', `${distanceKm ? formatNumber(distanceKm, 2) : '—'} km`);
     y = fieldRow(y, 'Costo €/km', `${formatEuroKm(result.cost_per_km_eur)}`);
-    y = fieldRow(y, 'Totale stimato', `${formatEuro(result.total_eur)}`, true);
+    const totalY = y + 2;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(60);
+    doc.text('Totale stimato:', marginX, totalY);
+    doc.setFontSize(15);
+    doc.setTextColor(20);
+    doc.text(`${formatEuro(result.total_eur)}`, valueX, totalY);
+    doc.setFont('helvetica', 'normal');
 
-    const safeDate = pdfDate.replace(/-/g, '');
-    const filename = `certificazione-costi-chilometrici-${safeDate}.pdf`;
+    const safeDate = pdfDate.replace(/-/g, '_');
+    const safeName = pdfName.trim().replace(/\\s+/g, '_');
+    const safeProject = pdfProject.trim().replace(/\\s+/g, '_') || 'senza_progetto';
+    const filename = `${safeDate}_calcolo_costi_chilometrici_${safeName}_${safeProject}.pdf`;
     doc.save(filename);
     setPdfOpen(false);
   }
