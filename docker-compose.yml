@@ -19,6 +19,7 @@ services:
       - "traefik.http.routers.costikm.rule=Host(`${DOMAIN}`) && PathPrefix(`/costikm`)"
       - "traefik.http.routers.costikm.entrypoints=websecure"
       - "traefik.http.routers.costikm.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.costikm.priority=100"
       - "traefik.http.middlewares.costikm-strip.stripprefix.prefixes=/costikm"
       - "traefik.http.routers.costikm.middlewares=costikm-strip"
       - "traefik.http.services.costikm.loadbalancer.server.port=4000"
