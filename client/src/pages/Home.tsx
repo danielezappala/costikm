@@ -382,15 +382,18 @@ export function Home() {
     });
   }, [saved, searchSaved]);
 
+  const watermarkGrid = `${import.meta.env.BASE_URL}watermark-grid.svg`;
+  const watermarkCar = `${import.meta.env.BASE_URL}watermark-car.svg`;
+
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-white via-white to-slate-50/60">
       <img
-        src="/watermark-grid.svg"
+        src={watermarkGrid}
         alt=""
         className="pointer-events-none absolute left-0 top-0 h-[520px] w-[520px] opacity-[0.08]"
       />
       <img
-        src="/watermark-car.svg"
+        src={watermarkCar}
         alt=""
         className="pointer-events-none absolute right-12 top-24 hidden w-[420px] opacity-[0.08] md:block"
       />
