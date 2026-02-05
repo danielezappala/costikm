@@ -67,7 +67,6 @@ Note: TLS is handled by the central Traefik (`tlsChallenge`), so `LE_EMAIL` live
 cd /home/daniele/projects/costikm
 cp .env.example .env
 # edit .env with real values
-# 
 docker network create traefik-net || true
 docker compose up -d --build
 ```
