@@ -62,7 +62,7 @@ This loads Excel files from `data/aci-xlsx/` into `data/costi.sqlite`.
 Note: TLS is handled by the central Traefik (`tlsChallenge`), so `LE_EMAIL` lives in `~/infra-traefik/traefik/traefik.yml` (not in this app).
 
 ### First deploy (manual)
-#
+
 ```bash
 cd /home/daniele/projects/costikm
 cp .env.example .env
