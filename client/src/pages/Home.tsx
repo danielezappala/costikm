@@ -17,7 +17,12 @@ import { formatEuro, formatEuroKm } from '@/utils/formatCurrency';
 import { formatNumber } from '@/utils/formatNumber';
 import { jsPDF } from 'jspdf';
 
-const API_BASE = import.meta.env.DEV ? 'http://localhost:4000' : '/costikm';
+const API_BASE = import.meta.env.DEV
+  ? 'http://localhost:4000'
+  : typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? ''
+  : '/costikm';
 
 type CalcResult = {
   cost_per_km_eur: number;
@@ -283,6 +288,11 @@ export function Home() {
         throw new Error(msg);
       }
       const calcData = (await calcResp.json()) as CalcResult;
+      if (import.meta.env.DEV) {
+        // Help debug missing fields in local dev.
+        // eslint-disable-next-line no-console
+        console.log('[calc] response', calcData);
+      }
       setResult(calcData);
       setLastCalculatedKey(currentKey);
       if (autoSave) {
@@ -317,6 +327,23 @@ export function Home() {
     setSaving(true);
     setSaveMessage('');
     try {
+      const distance = data.distance_km ?? distanceKm;
+      const costPerKm = data.cost_per_km_eur;
+      const total = data.total_eur;
+      const sourceYear = data.source_year;
+      const missing: string[] = [];
+      if (!Number.isFinite(distance)) missing.push('distance_km');
+      if (!Number.isFinite(costPerKm)) missing.push('cost_per_km_eur');
+      if (!Number.isFinite(total)) missing.push('total_eur');
+      if (!Number.isFinite(sourceYear)) missing.push('source_year');
+      if (missing.length > 0) {
+        if (import.meta.env.DEV) {
+          // eslint-disable-next-line no-console
+          console.log('[save] missing fields', missing, data);
+        }
+        throw new Error(`Calcolo incompleto, mancano: ${missing.join(', ')}`);
+      }
+
       const resp = await fetch(`${API_BASE}/api/calculations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -327,15 +354,25 @@ export function Home() {
           fuel,
           start,
           end,
-          distance_km: data.distance_km,
-          cost_per_km_eur: data.cost_per_km_eur,
-          total_eur: data.total_eur,
-          power_cv: data.power_cv,
-          model_id: data.model_id,
-          source_year: data.source_year,
+          distance_km: distance,
+          cost_per_km_eur: costPerKm,
+          total_eur: total,
+          power_cv: data.power_cv ?? null,
+          model_id: data.model_id ?? null,
+          source_year: sourceYear,
         }),
       });
-      if (!resp.ok) throw new Error('Salvataggio non riuscito');
+      if (!resp.ok) {
+        let msg = 'Salvataggio non riuscito';
+        try {
+          const err = await resp.json();
+          if (err?.error) msg = err.error;
+          if (Array.isArray(err?.details)) {
+            msg = `${msg}: ${err.details.map((d: { path?: string[] }) => d.path?.join('.')).filter(Boolean).join(', ')}`;
+          }
+        } catch (_) {}
+        throw new Error(msg);
+      }
       const savedItem = await resp.json();
       setSaved((prev) => [{ ...data, ...savedItem, category, brand, model, fuel, start, end }, ...prev]);
       setSaveMessage('Calcolo salvato');
@@ -717,7 +754,7 @@ export function Home() {
                       </div>
                     </DialogContent>
                   </Dialog>
-                  <Button variant="ghost" onClick={handleSave} loading={saving}>
+                  <Button variant="ghost" onClick={() => handleSave()} loading={saving}>
                     Salva calcolo
                   </Button>
                 </div>
