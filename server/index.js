@@ -109,7 +109,7 @@ app.post('/api/geocode', async (req, res) => {
   if (!parsed.success) return res.status(400).json({ error: 'invalid payload', details: parsed.error.errors });
 
   try {
-    const url = `${ORS_GEOCODE}?text=${encodeURIComponent(parsed.data.query)}&size=1`;
+    const url = `${ORS_GEOCODE}?text=${encodeURIComponent(parsed.data.query)}&size=1&boundary.country=IT`;
     const response = await fetch(url, {
       headers: { Authorization: ORS_API_KEY },
     });

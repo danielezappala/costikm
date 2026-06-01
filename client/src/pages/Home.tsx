@@ -18,7 +18,7 @@ import { formatNumber } from '@/utils/formatNumber';
 import { jsPDF } from 'jspdf';
 
 const API_BASE = import.meta.env.DEV
-  ? 'http://localhost:4000'
+  ? ''
   : typeof window !== 'undefined' &&
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? ''

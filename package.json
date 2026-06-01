@@ -7,7 +7,7 @@
     "server": "node server/index.js",
     "import:aci": "node server/import-aci.js",
     "client": "npm run dev --prefix client",
-    "dev": "bash scripts/kill-ports.sh 4000 5173 && concurrently -k \"npm run server\" \"npm run client\""
+    "dev": "concurrently -k \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "better-sqlite3": "^9.4.0",
