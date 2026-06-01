@@ -25,14 +25,26 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           APP_DIR: ${{ secrets.APP_DIR }}
           REPO_URL: git@github.com:danielezappala/costikm.git
+          ORS_API_KEY: ${{ secrets.ORS_API_KEY }}
+          DOMAIN: ${{ secrets.DOMAIN }}
+          APP_PORT: ${{ secrets.PORT }}
         run: |
-          ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "APP_DIR='$APP_DIR' REPO_URL='$REPO_URL' bash -s" << 'EOF'
+          ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "APP_DIR='$APP_DIR' REPO_URL='$REPO_URL' ORS_API_KEY='$ORS_API_KEY' DOMAIN='$DOMAIN' APP_PORT='${APP_PORT:-4000}' bash -s" << 'EOF'
             set -e
             if [ ! -d "$APP_DIR/.git" ]; then
               rm -rf "$APP_DIR"
               git clone "$REPO_URL" "$APP_DIR"
             fi
             cd "$APP_DIR"
+            if [ -z "$ORS_API_KEY" ] || [ -z "$DOMAIN" ]; then
+              echo "Missing required deploy secrets: ORS_API_KEY and/or DOMAIN"
+              exit 1
+            fi
+            cat > .env <<ENV
+PORT=${APP_PORT:-4000}
+ORS_API_KEY=$ORS_API_KEY
+DOMAIN=$DOMAIN
+ENV
             pwd
             ls -la
             git remote set-url origin "$REPO_URL"
