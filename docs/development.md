@@ -7,6 +7,8 @@
 - Node.js 20 LTS
 - npm
 
+Se usi `nvm`, esegui `nvm use` nella root del progetto prima di installare dipendenze o avviare i server.
+
 ### Setup
 
 1. Create `.env` from `.env.example` and set:

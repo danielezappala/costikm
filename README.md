@@ -4,6 +4,7 @@ Applicazione React/Vite + backend Express per calcolare i costi chilometrici ACI
 
 ## Configurazione
 
+- Usa Node.js 20 LTS (`nvm use` con il file `.nvmrc`)
 - Crea `.env` partendo da `.env.example`
 - Imposta `ORS_API_KEY`
 
