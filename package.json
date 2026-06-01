@@ -10,7 +10,7 @@
     "server": "node server/index.js",
     "import:aci": "node server/import-aci.js",
     "client": "npm run dev --prefix client",
-    "dev": "concurrently -k \"npm run server\" \"npm run client\""
+    "dev": "DEV_API_PORT=4001 PORT=4001 concurrently -k \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "better-sqlite3": "^9.4.0",

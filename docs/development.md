@@ -29,9 +29,11 @@ npm run dev
 
 This starts:
 
-- API on `http://localhost:4000`
+- API on `http://localhost:4001`
 - Vite dev server on `http://localhost:5174`
 - API calls from the client are proxied to the backend via Vite `/api`
+
+Production continues to use `PORT=4000`.
 
 ### Import ACI data
 
